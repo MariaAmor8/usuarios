@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-q3^x^y7d-+t&2*s^30+!uq($f&8jw+d35a&ig&6#=8-cx%#dp8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -125,5 +125,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # MongoDB Atlas Config
-MONGO_CLI = os.environ['MONGO_CLIENT']
+MONGO_CLI = os.environ['MONGO_CLI']
 #MONGO_CLI = 'mongodb://admin:Ponyo123@localhost:27017'
