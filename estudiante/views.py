@@ -69,3 +69,66 @@ def studentAddPago(request, student_id):
             return JsonResponse(response, safe=False)
         except ValueError as e:
             return JsonResponse({"error": str(e)}, status=400)
+        
+        
+#------------------------------ metodos sin ecnriptar y desencriptar---------------------------
+
+@api_view(["GET", "POST"])
+def estudiantes(request):
+    """Maneja las solicitudes para obtener y crear estudiantes SIN cifrar"""
+    
+    if request.method == "GET":
+        # Obtener todos los estudiantes
+        students = estudiante_logic.getStudents()
+        return JsonResponse([student.__dict__ for student in students], safe=False)
+    if request.method == "POST":
+        try:
+            # Crear un nuevo estudiante
+            data = JSONParser().parse(request)
+            student = estudiante_logic.createStudent(data)
+            response = {
+                "objectId": str(student.id),
+                "message": f"Estudiante {student.nombre} creado en la base de datos"
+            }
+            return JsonResponse(response, safe=False)
+        except ValueError as e:
+            return JsonResponse({"error": str(e)}, status=400)
+        
+        
+@api_view(["GET", "DELETE"])
+def detalleEstudiante(request, student_id):
+    """Maneja las solicitudes para un estudiante específico: obtener o eliminar SIN cifrar"""
+    
+    if request.method == "GET":
+        try:
+            # Obtener detalles de un estudiante por su numId
+            student = estudiante_logic.getStudent(student_id)
+            return JsonResponse(student.__dict__, safe=False)
+        except ValueError as e:
+            return JsonResponse({"error": str(e)}, status=404)
+    if request.method == "DELETE":
+        # Eliminar un estudiante por su numId
+        result = estudiante_logic.deleteEstudiante(student_id)
+        response = {
+            "objectID": str(result),
+            "message": "Estudiante eliminado de la base de datos"
+        }
+        return JsonResponse(response, safe=False)
+    
+    
+@api_view(["POST"])
+def anadirPago(request, student_id):
+    """Maneja la solicitud para agregar un pago a un estudiante SIN cifrar"""
+    
+    if request.method == "POST":
+        try:
+            # Agregar un pago al estudiante
+            data = JSONParser().parse(request)
+            add_result = estudiante_logic.add_pago(student_id, data)
+            response = {
+                "result": str(add_result),
+                "message": f"Pago agregado al estudiante con ID {student_id}"
+            }
+            return JsonResponse(response, safe=False)
+        except ValueError as e:
+            return JsonResponse({"error": str(e)}, status=400)
