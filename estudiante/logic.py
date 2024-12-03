@@ -156,7 +156,7 @@ def add_pago(est_numId, data):
     
     # Actualizar el estudiante en la base de datos
     result = estudiantes_collection.update_one(
-        {'numId': est_numId},
+        {'numId': encrypt(est_numId)},
         {
             '$set': {
                 'pagos': estudiante.pagos,
