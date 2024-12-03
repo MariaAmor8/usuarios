@@ -27,6 +27,7 @@ def getStudent(numId):
     estudiantes_collection = db['estudiantes']
     numIdEncript = encrypt(numId)
     print(numIdEncript)
+    print(encrypt(numId))
     estudiante = estudiantes_collection.find_one({'numId': numIdEncript}) 
 
     client.close()
