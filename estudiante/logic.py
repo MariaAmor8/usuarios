@@ -157,7 +157,7 @@ def add_pago(est_numId, data):
         {
             '$set': {
                 'pagos': estudiante.pagos,
-                'saldo': saldo_actualizado_str  # Guardar como string
+                'saldo': encrypt(saldo_actualizado_str)  # Guardar como string
             }
         }
     )
