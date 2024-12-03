@@ -137,8 +137,12 @@ def anadirPago(request, student_id):
         
 # =====================================================================
 
-def check_pago(data):
+def check_pago(data, idPago):
+    idPago = 1
     r = requests.get(settings.PATH_CRONOGRAMAS, headers={"Accept":"application/json"})
     pagos = r.json()
+    for pago in pagos:
+        if pago["id"] == idPago:
+            print("Encontrado")
     print(pagos)
-    return pagos
+    return pagos[0]
