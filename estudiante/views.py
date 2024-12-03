@@ -60,9 +60,30 @@ def studentAddPago(request, student_id):
     
     if request.method == "POST":
         try:
-            # Agregar un pago al estudiante
+            # Parsear los datos recibidos en el request
             data = JSONParser().parse(request)
-            add_result = estudiante_logic.add_pago(student_id, data)
+            idPago = data.get("idPago")
+            if not idPago:
+                raise ValueError("El campo 'idPago' es obligatorio")
+            
+            # Obtener los datos del pago de la otra máquina
+            pago = check_pago(idPago)
+            if not pago:
+                raise ValueError(f"Pago con id {idPago} no encontrado")
+            
+            # Formatear los datos del pago como strings
+            pago_formateado = {
+                "id": str(pago["id"]),
+                "valor": pago["valor"],
+                "causacion": str(pago["causacion"]),
+                "fechaLimite": str(pago["fechaLimite"]),
+                "estadoPago": str(pago["estado"]).lower(),  # Convertir estado a string
+                "mes": str(pago["mes"])
+            }
+
+            # Agregar el pago al estudiante
+            add_result = estudiante_logic.add_pago(student_id, pago_formateado)
+            
             response = {
                 "result": str(add_result),
                 "message": f"Pago agregado al estudiante con ID {student_id}"
