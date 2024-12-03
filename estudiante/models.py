@@ -40,15 +40,15 @@ class Estudiante():
         estudiante = Estudiante()
         estudiante.id = str(dto.get('_id', ''))
         estudiante.nombre = decrypt(str(dto.get('nombre', '')))
-        estudiante.numId = str(dto.get('numId', ''))
-        estudiante.telefono = str(dto.get('telefono', ''))
-        estudiante.colegio = dto.get('colegio', '')
-        estudiante.carnet = str(dto.get('carnet', ''))
-        estudiante.grado = str(dto.get('grado', ''))
-        estudiante.curso = dto.get('curso', '')
-        estudiante.emailPadreFamilia = dto.get('emailPadreFamilia', '')
-        estudiante.pagos = dto.get('pagos', [])
-        estudiante.saldo = str(dto.get('saldo', 0.0))
+        estudiante.numId = decrypt(str(dto.get('numId', '')))
+        estudiante.telefono = decrypt(str(dto.get('telefono', '')))
+        estudiante.colegio = decrypt(dto.get('colegio', ''))
+        estudiante.carnet = decrypt(str(dto.get('carnet', '')))
+        estudiante.grado = decrypt(str(dto.get('grado', '')))
+        estudiante.curso = decrypt(dto.get('curso', ''))
+        estudiante.emailPadreFamilia = decrypt(dto.get('emailPadreFamilia', ''))
+        estudiante.pagos = dto.get('pagos', []),
+        estudiante.saldo = decrypt(str(dto.get('saldo', 0.0)))
         return estudiante
 
 

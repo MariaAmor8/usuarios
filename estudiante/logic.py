@@ -66,14 +66,14 @@ def createStudent(data):
     estudiante.id = estudiantes_collection.insert(
         {
             'nombre': encrypt(estudiante.nombre),
-            'numId': estudiante.numId,
-            'telefono': estudiante.telefono, 
-            'colegio': estudiante.colegio,
-            'carnet': estudiante.carnet,
-            'grado': estudiante.grado,
-            'curso': estudiante.curso,
-            'emailPadreFamilia': estudiante.emailPadreFamilia,
-            'saldo': estudiante.saldo
+            'numId': encrypt(estudiante.numId),
+            'telefono': encrypt(estudiante.telefono), 
+            'colegio': encrypt(estudiante.colegio),
+            'carnet': encrypt(estudiante.carnet),
+            'grado': encrypt(estudiante.grado),
+            'curso': encrypt(estudiante.curso),
+            'emailPadreFamilia': encrypt(estudiante.emailPadreFamilia),
+            'saldo': encrypt(estudiante.saldo)
         }
         )
     
