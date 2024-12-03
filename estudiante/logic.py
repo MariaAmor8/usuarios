@@ -133,10 +133,10 @@ def add_pago(est_numId, data):
     # Agregar el nuevo pago a la lista de pagos
     new_pago_dict = {
         'valor': str(valor_pago),  # Guardamos como string
-        'causacion': new_pago.causacion,
-        'fechaLimite': new_pago.fechaLimite,
-        'estadoPago': new_pago.estadoPago,
-        'mes': new_pago.mes
+        'causacion': encrypt(new_pago.causacion),
+        'fechaLimite': encrypt(new_pago.fechaLimite),
+        'estadoPago': encrypt(new_pago.estadoPago),
+        'mes': encrypt(new_pago.mes)
     }
     estudiante.pagos.append(new_pago_dict)
     

@@ -73,3 +73,14 @@ class Pago():
         pago.estadoPago = str(dto.get('estadoPago', 'False'))
         pago.mes = str(dto.get('mes', ''))
         return pago
+    
+    @staticmethod
+    def from_mongo_decrypted(dto):
+        pago =Pago()
+        pago.id = str(dto.get('_id', ''))
+        pago.valor = str(dto.get('valor', ''))
+        pago.causacion = decrypt(str(dto.get('causacion', '')))
+        pago.fechaLimite = decrypt(str(dto.get('fechaLimite', '')))
+        pago.estadoPago = decrypt(str(dto.get('estadoPago', 'False')))
+        pago.mes = decrypt(str(dto.get('mes', '')))
+        return pago
