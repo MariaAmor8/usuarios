@@ -251,7 +251,7 @@ def agregar_pago(est_numId, data):
     
     # Calcular el nuevo saldo solo si el pago no ha sido pagado
     saldo_actualizado = float(estudiante.saldo)
-    if not new_pago.estadoPago:  # Si el pago no está pagado
+    if  new_pago.estadoPago.lower() == 'false':  # Si el pago no está pagado
         saldo_actualizado += float(new_pago.valor)
     
     # Actualizar el estudiante en la base de datos
@@ -260,7 +260,7 @@ def agregar_pago(est_numId, data):
         {
             '$set': {
                 'pagos': estudiante.pagos,
-                'saldo': saldo_actualizado
+                'saldo': str(saldo_actualizado)
             }
         }
     )
