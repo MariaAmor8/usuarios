@@ -1,4 +1,6 @@
 from django.db import models
+from cryptography.fernet import Fernet
+from logic import decrypt
 
 # Create your models here.
 class Estudiante():
@@ -22,7 +24,23 @@ class Estudiante():
     def from_mongo(dto):
         estudiante = Estudiante()
         estudiante.id = str(dto.get('_id', ''))
-        estudiante.nombre = dto.get('nombre', '')
+        estudiante.nombre = str(dto.get('nombre', ''))
+        estudiante.numId = str(dto.get('numId', ''))
+        estudiante.telefono = str(dto.get('telefono', ''))
+        estudiante.colegio = dto.get('colegio', '')
+        estudiante.carnet = str(dto.get('carnet', ''))
+        estudiante.grado = str(dto.get('grado', ''))
+        estudiante.curso = dto.get('curso', '')
+        estudiante.emailPadreFamilia = dto.get('emailPadreFamilia', '')
+        estudiante.pagos = dto.get('pagos', [])
+        estudiante.saldo = str(dto.get('saldo', 0.0))
+        return estudiante
+    
+    @staticmethod
+    def from_mongo_decrypted(dto):
+        estudiante = Estudiante()
+        estudiante.id = str(dto.get('_id', ''))
+        estudiante.nombre = decrypt(str(dto.get('nombre', '')))
         estudiante.numId = str(dto.get('numId', ''))
         estudiante.telefono = str(dto.get('telefono', ''))
         estudiante.colegio = dto.get('colegio', '')
