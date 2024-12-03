@@ -137,12 +137,55 @@ def anadirPago(request, student_id):
         
 # =====================================================================
 
-def check_pago(data):
-    idPago = 1
-    r = requests.get(settings.PATH_CRONOGRAMAS, headers={"Accept":"application/json"})
-    pagos = r.json()
-    for pago in pagos:
-        if pago["id"] == idPago:
-            print("Encontrado")
-    print(pagos)
-    return pagos[0]
+def check_pago(idPago):
+    """Obtiene el pago de la otra máquina usando el idPago"""
+    try:
+        r = requests.get(settings.PATH_CRONOGRAMAS, headers={"Accept": "application/json"})
+        r.raise_for_status()  # Lanza una excepción si la respuesta es un error
+        pagos = r.json()
+        for pago in pagos:
+            if pago["id"] == idPago:
+                return pago
+    except requests.exceptions.RequestException as e:
+        raise ValueError(f"Error al obtener el pago: {str(e)}")
+    
+    return None
+
+
+@api_view(["POST"])
+def anadirPago(request, student_id):
+    """Maneja la solicitud para agregar un pago a un estudiante SIN cifrar"""
+    
+    if request.method == "POST":
+        try:
+            # Parsear los datos recibidos en el request
+            data = JSONParser().parse(request)
+            idPago = data.get("idPago")
+            if not idPago:
+                raise ValueError("El campo 'idPago' es obligatorio")
+            
+            # Obtener los datos del pago de la otra máquina
+            pago = check_pago(idPago)
+            if not pago:
+                raise ValueError(f"Pago con id {idPago} no encontrado")
+            
+            # Formatear los datos del pago como strings
+            pago_formateado = {
+                "id": str(pago["id"]),
+                "valor": str(pago["valor"]),
+                "causacion": str(pago["causacion"]),
+                "fechaLimite": str(pago["fechaLimite"]),
+                "estadoPago": str(pago["estado"]).lower(),  # Convertir estado a string
+                "mes": str(pago["mes"])
+            }
+
+            # Agregar el pago al estudiante
+            add_result = estudiante_logic.agregar_pago(student_id, pago_formateado)
+            
+            response = {
+                "result": str(add_result),
+                "message": f"Pago agregado al estudiante con ID {student_id}"
+            }
+            return JsonResponse(response, safe=False)
+        except ValueError as e:
+            return JsonResponse({"error": str(e)}, status=400)
