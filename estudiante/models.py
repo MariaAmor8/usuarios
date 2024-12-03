@@ -7,12 +7,12 @@ class Estudiante():
     numId= str()
     telefono= str()
     colegio = str()
-    carnet = int()
-    grado = int()
+    carnet = str()
+    grado = str()
     curso = str()
     emailPadreFamilia = str()
     pagos = list()
-    saldo = float() 
+    saldo = str() 
     
     def __str__(self):
         return self.nombre + " - " + self.numId
@@ -31,16 +31,16 @@ class Estudiante():
         estudiante.curso = dto.get('curso', '')
         estudiante.emailPadreFamilia = dto.get('emailPadreFamilia', '')
         estudiante.pagos = dto.get('pagos', [])
-        estudiante.saldo = float(dto.get('saldo', 0.0))
+        estudiante.saldo = str(dto.get('saldo', 0.0))
         return estudiante
 
 
 class Pago():
     id = str()
     valor = str()
-    cusacion= str()
+    causacion= str()
     fechaLimite = str()
-    estadoPago = bool()
+    estadoPago = str()
     mes = str()
     
     def __str__(self):
@@ -51,8 +51,8 @@ class Pago():
         pago =Pago()
         pago.id = str(dto.get('_id', ''))
         pago.valor = str(dto.get('valor', ''))
-        pago.cusacion = str(dto.get('cusacion', ''))
+        pago.causacion = str(dto.get('causacion', ''))
         pago.fechaLimite = str(dto.get('fechaLimite', ''))
-        pago.estadoPago = dto.get('estadoPago', False)
+        pago.estadoPago = str(dto.get('estadoPago', 'False'))
         pago.mes = str(dto.get('mes', ''))
         return pago

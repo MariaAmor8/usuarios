@@ -3,6 +3,26 @@ from bson.objectid import ObjectId
 from django.conf import settings
 import datetime
 from estudiante.models import Estudiante, Pago
+from cryptography.fernet import Fernet
+import os
+
+# Asegúrate de tener una clave secreta que se almacene de forma segura
+def get_key():
+    KEY = os.environ['Key']
+    return KEY  # No uses la clave secreta de Django directamente en producción.
+
+# Cifra un valor antes de guardarlo en la base de datos
+def encrypt(value):
+    cipher_suite = Fernet(get_key())
+    encrypted_value = cipher_suite.encrypt(value.encode())
+    return encrypted_value
+
+# Descifra el valor cuando se recupera de la base de datos
+def decrypt(value):
+    cipher_suite = Fernet(get_key())
+    decrypted_value = cipher_suite.decrypt(value).decode()
+    return decrypted_value
+    
 
 def getStudents():
     """Obtiene todos los estudiantes de la base de datos"""
@@ -63,7 +83,7 @@ def createStudent(data):
     
     estudiante.id = estudiantes_collection.insert(
         {
-            'nombre': estudiante.nombre,
+            'nombre': encrypt(estudiante.nombre),
             'numId': estudiante.numId,
             'telefono': estudiante.telefono, 
             'colegio': estudiante.colegio,
@@ -89,10 +109,10 @@ def deleteEstudiante(id):
 def verifyPagoData(data):
     pago = Pago()
     pago.valor = data['valor']
-    pago.cusacion = data['cusacion']
+    pago.causacion = data['causacion']
     pago.fechaLimite = data['fechaLimite']
-    if not isinstance(data['estadoPago'], bool):
-        raise ValueError("estadoPago debe ser un valor booleano (True o False)")
+    #if not isinstance(data['estadoPago'], bool):
+    #    raise ValueError("estadoPago debe ser un valor booleano (True o False)")
     pago.estadoPago = data['estadoPago']
     pago.mes = data['mes']
     
@@ -118,10 +138,17 @@ def add_pago(est_numId, data):
     # Convertir el estudiante a un objeto
     estudiante = Estudiante.from_mongo(estudiante)
     
+    # Verificar si el valor es un string y convertirlo a float
+    try:
+        valor_pago = float(new_pago.valor)
+    except ValueError:
+        client.close()
+        raise ValueError(f"El valor del pago '{new_pago.valor}' no es válido como número.")
+    
     # Agregar el nuevo pago a la lista de pagos
     new_pago_dict = {
-        'valor': new_pago.valor,
-        'cusacion': new_pago.cusacion,
+        'valor': str(valor_pago),  # Guardamos como string
+        'causacion': new_pago.causacion,
         'fechaLimite': new_pago.fechaLimite,
         'estadoPago': new_pago.estadoPago,
         'mes': new_pago.mes
@@ -131,7 +158,7 @@ def add_pago(est_numId, data):
     # Calcular el nuevo saldo solo si el pago no ha sido pagado
     saldo_actualizado = estudiante.saldo
     if not new_pago.estadoPago:  # Si el pago no está pagado
-        saldo_actualizado += float(new_pago.valor)
+        saldo_actualizado += valor_pago
     
     # Actualizar el estudiante en la base de datos
     result = estudiantes_collection.update_one(
