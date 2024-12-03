@@ -172,7 +172,7 @@ def anadirPago(request, student_id):
             # Formatear los datos del pago como strings
             pago_formateado = {
                 "id": str(pago["id"]),
-                "valor": str(pago["valor"]),
+                "valor": pago["valor"],
                 "causacion": str(pago["causacion"]),
                 "fechaLimite": str(pago["fechaLimite"]),
                 "estadoPago": str(pago["estado"]).lower(),  # Convertir estado a string
