@@ -25,7 +25,9 @@ def getStudent(numId):
     db = client.usuarios_db  # Asegúrate de que 'usuarios_db' sea el nombre correcto de la base de datos
 
     estudiantes_collection = db['estudiantes']
-    estudiante = estudiantes_collection.find_one({'numId': numId}) 
+    numIdEncript = encrypt(numId)
+    print(numIdEncript)
+    estudiante = estudiantes_collection.find_one({'numId': numIdEncript}) 
 
     client.close()
 
