@@ -115,7 +115,7 @@ def add_pago(est_numId, data):
     estudiantes_collection = db['estudiantes']
     
     # Buscar el estudiante por numId
-    estudiante = estudiantes_collection.find_one({'numId': est_numId})
+    estudiante = estudiantes_collection.find_one({'numId': encrypt(est_numId)})
     if estudiante is None:
         client.close()
         raise ValueError('Estudiante no encontrado')
