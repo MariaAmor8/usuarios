@@ -3,7 +3,7 @@ from bson.objectid import ObjectId
 from django.conf import settings
 import datetime
 from estudiante.models import Estudiante, Pago
-from usuarios.cifrado import encrypt
+from usuarios.cifrado import encrypt, decrypt
 
 def getStudents():
     """Obtiene todos los estudiantes de la base de datos"""
@@ -122,7 +122,7 @@ def add_pago(est_numId, data):
     
     # Verificar si el valor es un string y convertirlo a float
     try:
-        valor_pago = float(new_pago.valor)
+        valor_pago = float(decrypt(new_pago.valor))
     except ValueError:
         client.close()
         raise ValueError(f"El valor del pago '{new_pago.valor}' no es válido como número.")
