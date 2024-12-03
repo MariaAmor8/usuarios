@@ -73,7 +73,7 @@ def createStudent(data):
             'grado': encrypt(estudiante.grado),
             'curso': encrypt(estudiante.curso),
             'emailPadreFamilia': encrypt(estudiante.emailPadreFamilia),
-            'saldo': encrypt(estudiante.saldo)
+            'saldo': encrypt(str(estudiante.saldo))
         }
         )
     
@@ -137,10 +137,19 @@ def add_pago(est_numId, data):
     }
     estudiante.pagos.append(new_pago_dict)
     
+    # Convertir el saldo actual a float antes de hacer el cálculo
+    try:
+        saldo_actualizado = float(estudiante.saldo)
+    except ValueError:
+        client.close()
+        raise ValueError(f"El saldo del estudiante '{est_numId}' no es un número válido.")
+    
     # Calcular el nuevo saldo solo si el pago no ha sido pagado
-    saldo_actualizado = estudiante.saldo
-    if not new_pago.estadoPago:  # Si el pago no está pagado
+    if new_pago.estadoPago.lower() == 'false':  # Si el pago no está pagado
         saldo_actualizado += valor_pago
+    
+    # Convertir el saldo actualizado de vuelta a string para guardarlo
+    saldo_actualizado_str = str(saldo_actualizado)
     
     # Actualizar el estudiante en la base de datos
     result = estudiantes_collection.update_one(
@@ -148,11 +157,12 @@ def add_pago(est_numId, data):
         {
             '$set': {
                 'pagos': estudiante.pagos,
-                'saldo': saldo_actualizado
+                'saldo': saldo_actualizado_str  # Guardar como string
             }
         }
     )
     
     client.close()
     return result.modified_count
+
 
