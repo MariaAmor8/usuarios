@@ -126,4 +126,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # MongoDB Atlas Config
 MONGO_CLI = os.environ['MONGO_CLI']
-#MONGO_CLI = 'mongodb://admin:Ponyo123@localhost:27017'
+
+PATH_CRONOGRAMAS = "http://127.0.0.1:8000/get_pagos_json/" #cambiar cuando tenga kong

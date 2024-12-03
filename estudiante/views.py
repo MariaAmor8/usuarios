@@ -6,6 +6,7 @@ from rest_framework.parsers import JSONParser
 from django.conf import settings
 from bson.objectid import ObjectId
 import estudiante.logic as estudiante_logic
+import requests
 
 # Create your views here.
 @api_view(["GET", "POST"])
@@ -132,3 +133,11 @@ def anadirPago(request, student_id):
             return JsonResponse(response, safe=False)
         except ValueError as e:
             return JsonResponse({"error": str(e)}, status=400)
+        
+        
+# =====================================================================
+
+def check_pago(data):
+    r = requests.get(settings.PATH_CRONOGRAMAS, headers={"Accept":"application/json"})
+    pagos = r.json()
+    print(pagos)

@@ -8,4 +8,5 @@ urlpatterns = [
     path('estudiantes', views.estudiantes, name='estudiantes'),
     path('estudiantes/<str:student_id>', views.detalleEstudiante, name='estudiante_detail'),
     path('estudiantes/<str:student_id>/pagos', views.anadirPago, name='estudiante_add_pago'),
+    path('getPagos', views.check_pago, name='Pagos')
 ]
