@@ -79,13 +79,13 @@ def estudiantes(request):
     
     if request.method == "GET":
         # Obtener todos los estudiantes
-        students = estudiante_logic.getStudents()
+        students = estudiante_logic.getEstudiantes()
         return JsonResponse([student.__dict__ for student in students], safe=False)
     if request.method == "POST":
         try:
             # Crear un nuevo estudiante
             data = JSONParser().parse(request)
-            student = estudiante_logic.createStudent(data)
+            student = estudiante_logic.createEstiudiante(data)
             response = {
                 "objectId": str(student.id),
                 "message": f"Estudiante {student.nombre} creado en la base de datos"
@@ -102,7 +102,7 @@ def detalleEstudiante(request, student_id):
     if request.method == "GET":
         try:
             # Obtener detalles de un estudiante por su numId
-            student = estudiante_logic.getStudent(student_id)
+            student = estudiante_logic.getEstudiante(student_id)
             return JsonResponse(student.__dict__, safe=False)
         except ValueError as e:
             return JsonResponse({"error": str(e)}, status=404)
@@ -124,7 +124,7 @@ def anadirPago(request, student_id):
         try:
             # Agregar un pago al estudiante
             data = JSONParser().parse(request)
-            add_result = estudiante_logic.add_pago(student_id, data)
+            add_result = estudiante_logic.agregar_pago(student_id, data)
             response = {
                 "result": str(add_result),
                 "message": f"Pago agregado al estudiante con ID {student_id}"
