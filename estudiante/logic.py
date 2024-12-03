@@ -3,36 +3,7 @@ from bson.objectid import ObjectId
 from django.conf import settings
 import datetime
 from estudiante.models import Estudiante, Pago
-from cryptography.fernet import Fernet
-import os
-import base64
-
-# Asegúrate de tener una clave secreta que se almacene de forma segura
-def get_key():
-    key = os.environ['Key']
-    print(str(Fernet.generate_key()))
-    try:
-        # Verificar que la clave es válida y tiene 32 bytes
-        decoded_key = base64.urlsafe_b64decode(key)
-        if len(decoded_key) != 32:
-            print(len(decoded_key))
-            raise ValueError("La clave debe ser de 32 bytes.")
-        return key.encode()  # Devolverla como bytes para usarla en Fernet
-    except Exception as e:
-        raise ValueError(f"Error al procesar la clave: {e}")
-
-# Cifra un valor antes de guardarlo en la base de datos
-def encrypt(value):
-    cipher_suite = Fernet(get_key())
-    encrypted_value = cipher_suite.encrypt(value.encode())
-    return str(encrypted_value)
-
-# Descifra el valor cuando se recupera de la base de datos
-def decrypt(value):
-    cipher_suite = Fernet(get_key())
-    decrypted_value = cipher_suite.decrypt(value).decode()
-    return decrypted_value
-    
+from usuarios.cifrado import encrypt
 
 def getStudents():
     """Obtiene todos los estudiantes de la base de datos"""

@@ -1,7 +1,5 @@
 from django.db import models
-from cryptography.fernet import Fernet
-import os
-import base64
+from usuarios.cifrado import decrypt
 
 # Create your models here.
 class Estudiante():
@@ -75,23 +73,3 @@ class Pago():
         pago.estadoPago = str(dto.get('estadoPago', 'False'))
         pago.mes = str(dto.get('mes', ''))
         return pago
-
-
-def get_key():
-    key = os.environ['Key']
-    print(str(Fernet.generate_key()))
-    try:
-        # Verificar que la clave es válida y tiene 32 bytes
-        decoded_key = base64.urlsafe_b64decode(key)
-        if len(decoded_key) != 32:
-            print(len(decoded_key))
-            raise ValueError("La clave debe ser de 32 bytes.")
-        return key.encode()  # Devolverla como bytes para usarla en Fernet
-    except Exception as e:
-        raise ValueError(f"Error al procesar la clave: {e}")
-    
-# Descifra el valor cuando se recupera de la base de datos
-def decrypt(value):
-    cipher_suite = Fernet(get_key())
-    decrypted_value = cipher_suite.decrypt(value).decode()
-    return decrypted_value
