@@ -137,7 +137,7 @@ def anadirPago(request, student_id):
         
 # =====================================================================
 
-def check_pago(data, idPago):
+def check_pago(data):
     idPago = 1
     r = requests.get(settings.PATH_CRONOGRAMAS, headers={"Accept":"application/json"})
     pagos = r.json()
