@@ -39,7 +39,7 @@ def studentDetail(request, student_id):
         try:
             # Obtener detalles de un estudiante por su numId
             student = estudiante_logic.getStudent(student_id)
-            return JsonResponse(student.__dict__, safe=False)
+            return JsonResponse(student.to_dict(), safe=False)
         except ValueError as e:
             return JsonResponse({"error": str(e)}, status=404)
 

@@ -54,6 +54,21 @@ class Estudiante():
         ]
         estudiante.saldo = decrypt(str(dto.get('saldo', 0.0)))
         return estudiante
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'nombre': self.nombre,
+            'numId': self.numId,
+            'telefono': self.telefono,
+            'colegio': self.colegio,
+            'carnet': self.carnet,
+            'grado': self.grado,
+            'curso': self.curso,
+            'emailPadreFamilia': self.emailPadreFamilia,
+            'pagos': [pago.to_dict() for pago in self.pagos],  # Convertir cada pago a dict
+            'saldo': self.saldo,
+        }
 
 
 class Pago():
@@ -88,3 +103,13 @@ class Pago():
         pago.estadoPago = decrypt(str(dto.get('estadoPago', 'False')))
         pago.mes = decrypt(str(dto.get('mes', '')))
         return pago
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'valor': self.valor,
+            'causacion': self.causacion,
+            'fechaLimite': self.fechaLimite,
+            'estadoPago': self.estadoPago,
+            'mes': self.mes,
+        }
