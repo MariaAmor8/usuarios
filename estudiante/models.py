@@ -47,7 +47,11 @@ class Estudiante():
         estudiante.grado = decrypt(str(dto.get('grado', '')))
         estudiante.curso = decrypt(dto.get('curso', ''))
         estudiante.emailPadreFamilia = decrypt(dto.get('emailPadreFamilia', ''))
-        estudiante.pagos = dto.get('pagos', []),
+        #estudiante.pagos = dto.get('pagos', []),
+        # Desencriptar los pagos
+        estudiante.pagos = [
+            Pago.from_mongo_decrypted(pago) for pago in dto.get('pagos', [])
+        ]
         estudiante.saldo = decrypt(str(dto.get('saldo', 0.0)))
         return estudiante
 
@@ -78,9 +82,9 @@ class Pago():
     def from_mongo_decrypted(dto):
         pago =Pago()
         pago.id = str(dto.get('_id', ''))
-        pago.valor = str(dto.get('valor', ''))
-        pago.causacion = str(dto.get('causacion', ''))
-        pago.fechaLimite = str(dto.get('fechaLimite', ''))
-        pago.estadoPago = str(dto.get('estadoPago', 'False'))
-        pago.mes = str(dto.get('mes', ''))
+        pago.valor = decrypt(str(dto.get('valor', '')))
+        pago.causacion = decrypt(str(dto.get('causacion', '')))
+        pago.fechaLimite = decrypt(str(dto.get('fechaLimite', '')))
+        pago.estadoPago = decrypt(str(dto.get('estadoPago', 'False')))
+        pago.mes = decrypt(str(dto.get('mes', '')))
         return pago
