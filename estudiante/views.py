@@ -141,3 +141,4 @@ def check_pago(data):
     r = requests.get(settings.PATH_CRONOGRAMAS, headers={"Accept":"application/json"})
     pagos = r.json()
     print(pagos)
+    return pagos
