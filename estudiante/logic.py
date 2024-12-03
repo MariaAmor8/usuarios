@@ -122,7 +122,7 @@ def add_pago(est_numId, data):
     
     # Verificar si el valor es un string y convertirlo a float
     try:
-        valor_pago = float(decrypt(new_pago.valor))
+        valor_pago = float(new_pago.valor)
     except ValueError:
         client.close()
         raise ValueError(f"El valor del pago '{new_pago.valor}' no es válido como número.")
@@ -139,7 +139,7 @@ def add_pago(est_numId, data):
     
     # Convertir el saldo actual a float antes de hacer el cálculo
     try:
-        saldo_actualizado = float(estudiante.saldo)
+        saldo_actualizado = float(decrypt(estudiante.saldo))
     except ValueError:
         client.close()
         raise ValueError(f"El saldo del estudiante '{est_numId}' no es un número válido.")
