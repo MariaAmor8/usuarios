@@ -212,7 +212,7 @@ def anadirPago(request, student_id):
             return JsonResponse({"error": str(e)}, status=400)
         
         
-@api_view(["DELETE"])
+@api_view(["GET"])
 def deleteAll(request):
     """Elimina todos los estudiantes de la base de datos"""
     try:
