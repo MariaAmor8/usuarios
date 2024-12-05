@@ -14,7 +14,7 @@ def getStudents():
     estudiantes_db = estudiantes_collection.find({})
 
     estudiantes = []
-    estudiantes += [Estudiante.from_mongo(estudiante) for estudiante in estudiantes_db]
+    estudiantes += [Estudiante.from_mongo_decrypted(estudiante) for estudiante in estudiantes_db]
     
     client.close()
     return estudiantes
@@ -267,3 +267,11 @@ def agregar_pago(est_numId, data):
     
     client.close()
     return result.modified_count
+
+def deleteAll():
+    client = MongoClient(settings.MONGO_CLI)
+    db = client.usuarios_db  # Asegúrate de que 'usuarios_db' sea el nombre correcto de la base de datos
+    estudiantes_collection = db['estudiantes']
+    result = estudiantes_collection.delete_many({})
+    client.close()
+    return result.deleted_count

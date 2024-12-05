@@ -11,7 +11,7 @@ import requests
 # Create your views here.
 @api_view(["GET", "POST"])
 def students(request):
-    """Maneja las solicitudes para obtener y crear estudiantes."""
+    """Mostrar todos los estudiantes DESCIFRADOS"""
     
     if request.method == "GET":
         # Obtener todos los estudiantes
@@ -210,3 +210,17 @@ def anadirPago(request, student_id):
             return JsonResponse(response, safe=False)
         except ValueError as e:
             return JsonResponse({"error": str(e)}, status=400)
+        
+        
+@api_view(["DELETE"])
+def deleteAll(request):
+    """Elimina todos los estudiantes de la base de datos"""
+    try:
+        # Llamar a la función para eliminar todos los estudiantes
+        deleted_count = estudiante_logic.deleteAll()
+        response = {
+            "message": f"Se eliminaron {deleted_count} estudiantes de la base de datos"
+        }
+        return JsonResponse(response, safe=False)
+    except ValueError as e:
+        return JsonResponse({"error": str(e)}, status=400)
